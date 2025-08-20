@@ -13,11 +13,16 @@ import (
 // Scanner represents a lexical scanner for InfluxQL.
 type Scanner struct {
 	r *reader
+	l *Lexer
 }
 
 // NewScanner returns a new instance of Scanner.
 func NewScanner(r io.Reader) *Scanner {
 	return &Scanner{r: &reader{r: bufio.NewReader(r)}}
+}
+
+func newLexerScanner(r io.Reader, l *Lexer) *Scanner {
+	return &Scanner{r: &reader{r: bufio.NewReader(r)}, l: l}
 }
 
 // Scan returns the next token and position from the underlying reader.
@@ -223,8 +228,14 @@ func (s *Scanner) scanIdent() (tok Token, pos Pos, lit string) {
 	}
 	lit = buf.String()
 
+	if s.l != nil {
+		tok = s.l.Lookup(lit)
+	} else {
+		tok = Lookup(lit)
+	}
+
 	// If the literal matches a keyword then return that keyword.
-	if tok = Lookup(lit); tok != IDENT {
+	if tok != IDENT {
 		return tok, pos, ""
 	}
 

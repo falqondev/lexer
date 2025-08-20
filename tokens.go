@@ -90,7 +90,7 @@ const (
 	endOperators
 )
 
-var tokens = map[Token]string{
+var baseTokens = map[Token]string{
 	ILLEGAL: "ILLEGAL",
 	EOF:     "EOF",
 	WS:      "WS",
@@ -155,6 +155,8 @@ var tokens = map[Token]string{
 	GTE: ">=",
 }
 
+var tokens = baseTokens
+
 var keywords = map[string]Token{}
 
 func init() {
@@ -180,8 +182,8 @@ func LoadTokenMap(keywordTokens map[Token]string) {
 
 // String returns the string representation of the token.
 func (tok Token) String() string {
-	if _, ok := tokens[tok]; ok {
-		return tokens[tok]
+	if s, ok := tokens[tok]; ok {
+		return s
 	}
 	return ""
 }

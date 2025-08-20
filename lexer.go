@@ -47,7 +47,12 @@ func (l *Lexer) Lookup(ident string) Token {
 func (l *Lexer) Scan() (tok Token, pos Pos, lit string) {
 	return l.s.Scan()
 }
-
+func (l *Lexer) Peek() rune {
+	return l.s.Peek()
+}
 func (l *Lexer) ScanRegex() (tok Token, pos Pos, lit string) {
 	return l.s.ScanRegex()
+}
+func (l *Lexer) Scanner() *Scanner {
+	return l.s
 }
